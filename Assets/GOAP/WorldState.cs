@@ -12,9 +12,8 @@ public class WorldState
 
     public bool brokenCabinet;
     public bool angryOwner;
-    public bool elfBloodAllowed;
+    public bool cabinetOpen;
     public bool playDarts;
-    public bool allowedToPlayDarts;
 
     public bool hasEscaped;
 
@@ -31,10 +30,9 @@ public class WorldState
             equipment = equipment,
             brokenCabinet = brokenCabinet,
             angryOwner = angryOwner,
-            elfBloodAllowed = elfBloodAllowed,
+            cabinetOpen = cabinetOpen,
             hasEscaped = hasEscaped,
             playDarts = playDarts,
-            allowedToPlayDarts = allowedToPlayDarts,
             steps = steps,
         };
     }

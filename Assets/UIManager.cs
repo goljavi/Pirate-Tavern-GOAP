@@ -58,9 +58,8 @@ public class UIManager : MonoBehaviour
     public Dropdown equipment;
     public Dropdown brokenCabinet;
     public Dropdown angryOwner;
-    public Dropdown elfBloodAllowed;
+    public Dropdown cabinetOpen;
     public Dropdown playDarts;
-    public Dropdown allowedToPlayDarts;
 
     public Dropdown presets;
 
@@ -182,14 +181,14 @@ public class UIManager : MonoBehaviour
                 break;
         }
 
-        // Elf Blood Allowed
-        switch ((DefaultDropdown)elfBloodAllowed.value)
+        // Cabinet Open
+        switch ((DefaultDropdown)cabinetOpen.value)
         {
             case DefaultDropdown.True:
-                preferences += (WorldState wrld) => wrld.elfBloodAllowed == true;
+                preferences += (WorldState wrld) => wrld.cabinetOpen == true;
                 break;
             case DefaultDropdown.False:
-                preferences += (WorldState wrld) => wrld.elfBloodAllowed == false;
+                preferences += (WorldState wrld) => wrld.cabinetOpen == false;
                 break;
             default:
                 break;
@@ -203,19 +202,6 @@ public class UIManager : MonoBehaviour
                 break;
             case DefaultDropdown.False:
                 preferences += (WorldState wrld) => wrld.playDarts == false;
-                break;
-            default:
-                break;
-        }
-
-        // Play Darts
-        switch ((DefaultDropdown)allowedToPlayDarts.value)
-        {
-            case DefaultDropdown.True:
-                preferences += (WorldState wrld) => wrld.allowedToPlayDarts == true;
-                break;
-            case DefaultDropdown.False:
-                preferences += (WorldState wrld) => wrld.allowedToPlayDarts == false;
                 break;
             default:
                 break;
@@ -279,9 +265,8 @@ public class UIManager : MonoBehaviour
         equipment.value = 0;
         brokenCabinet.value = 0;
         angryOwner.value = 0;
-        elfBloodAllowed.value = 0;
+        cabinetOpen.value = 0;
         playDarts.value = 0;
-        allowedToPlayDarts.value = 0;
     }
 
     public void RunButtonPressed()

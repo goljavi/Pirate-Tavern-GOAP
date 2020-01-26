@@ -94,7 +94,7 @@ public static class GOAPDefaults
             .AddPrecondition(wrld => wrld.equipment == Equipment.Key)
 
             .AddEffect(wrld => { wrld.equipment = Equipment.None; return wrld; })
-            .AddEffect(wrld => { wrld.elfBloodAllowed = true; return wrld; });
+            .AddEffect(wrld => { wrld.cabinetOpen = true; return wrld; });
 
     public static GOAPAction ActionBreakCabinet = new GOAPAction("Break cabinet")
             .AddCost(1f)
@@ -102,16 +102,16 @@ public static class GOAPDefaults
 
             .AddEffect(wrld => { wrld.equipment = Equipment.None; return wrld; })
             .AddEffect(wrld => { wrld.brokenCabinet = true; return wrld; })
-            .AddEffect(wrld => { wrld.elfBloodAllowed = true; return wrld; });
+            .AddEffect(wrld => { wrld.cabinetOpen = true; return wrld; });
 
 
 
     // Step 3
     public static GOAPAction ActionStealElfBlood = new GOAPAction("Steal elf blood")
             .AddCost(1f)
-            .AddPrecondition(wrld => wrld.elfBloodAllowed == true)
+            .AddPrecondition(wrld => wrld.cabinetOpen == true)
 
-            .AddEffect(wrld => { wrld.elfBloodAllowed = false; return wrld; })
+            .AddEffect(wrld => { wrld.cabinetOpen = false; return wrld; })
             .AddEffect(wrld => { wrld.equipment = Equipment.ElfBlood; return wrld; });
 
     public static GOAPAction ActionStealCabinet = new GOAPAction("Steal cabinet")
