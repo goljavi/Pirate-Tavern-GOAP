@@ -5,6 +5,7 @@ using UnityEngine;
 public static class GOAPDefaults
 {
     public static int watchdog = 5000;
+    public static Preferences<WorldState> preferences;
 
     public static WorldState DefaultWorldState = new WorldState()
     {
@@ -19,24 +20,24 @@ public static class GOAPDefaults
 
     public static float Heuristic(WorldState current)
     {
-        return current.steps 
-            + (current.hasEscaped == true ? 0 : 5);
+        return current.steps
+            + ((preferences.PreferencesList.Count - preferences.SatisfiesQuantity(current)) * 5);
     }
 
-    public static IEnumerable<AStar<WorldState>.Arc> Expand(WorldState current, IEnumerable<GOAPAction> actions)
+    public static IEnumerable<AStar<WorldState>.NodeCost> Expand(WorldState current, IEnumerable<GOAPAction> actions)
     {
-        if (watchdog == 0) return Enumerable.Empty<AStar<WorldState>.Arc>();
+        if (watchdog == 0) return Enumerable.Empty<AStar<WorldState>.NodeCost>();
         else watchdog--;
 
         return actions
             .Where(action => action.preconditions.All(condition => condition(current)))
-            .Aggregate(new List<AStar<WorldState>.Arc>(), (possibleList, action) =>
+            .Aggregate(new List<AStar<WorldState>.NodeCost>(), (possibleList, action) =>
             {
                 var newState = current.Clone();
                 newState.steps++;
                 action.effects.ForEach(applyEffect => applyEffect(newState));
                 newState.generatingAction = action;
-                possibleList.Add(new AStar<WorldState>.Arc(newState, action.cost));
+                possibleList.Add(new AStar<WorldState>.NodeCost(newState, action.cost));
 
                 return possibleList;
             });

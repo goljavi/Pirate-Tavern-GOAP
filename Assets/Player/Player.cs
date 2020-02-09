@@ -454,7 +454,11 @@ public class Player : MonoBehaviour
         return _currentWorldState.drunkenness == 0 ? rand < 0.3 : rand < 0.7;
     }
 
-    void OnRunButtonPressed(Preferences<WorldState> preferences) => StartCoroutine(new Planner(preferences, OnFinishedPlanning).Plan());
+    void OnRunButtonPressed(Preferences<WorldState> preferences)
+    {
+        GOAPDefaults.preferences = preferences;
+        StartCoroutine(new Planner(preferences, OnFinishedPlanning).Plan());
+    }
 
     void OnFinishedPlanning(IEnumerable<WorldState> plan)
     {

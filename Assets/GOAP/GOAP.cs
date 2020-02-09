@@ -10,15 +10,16 @@ public class GOAP<T> where T : class
     IEnumerable<GOAPAction> _actions;
     Func<T, float> _heuristic;
     Preferences<T> _preferences;
-    Func<T, IEnumerable<GOAPAction>, IEnumerable<AStar<T>.Arc>> _expand;
+    Func<T, IEnumerable<GOAPAction>, IEnumerable<AStar<T>.NodeCost>> _expand;
     Action<IEnumerable<T>> _callback;
 
     public GOAP
     (
         T start, 
         IEnumerable<GOAPAction> actions, 
-        Func<T, float> heuristic, Preferences<T> preferences, 
-        Func<T, IEnumerable<GOAPAction>, IEnumerable<AStar<T>.Arc>> expand,
+        Func<T, float> heuristic, 
+        Preferences<T> preferences, 
+        Func<T, IEnumerable<GOAPAction>, IEnumerable<AStar<T>.NodeCost>> expand,
         Action<IEnumerable<T>> callback
     )
     {

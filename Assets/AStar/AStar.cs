@@ -2,39 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
-
 public class AStar<Node> where Node : class
 {
-    //Podría guardar ambas cosas en una tupla, pero al crear una clase custom me da mas legibilidad abajo
-    public class Arc
+    public class NodeCost
     {
         public Node endpoint;
         public float cost;
-        public Arc(Node ep, float c)
+        public NodeCost(Node ep, float c)
         {
             endpoint = ep;
             cost = c;
         }
     }
 
-    //expand can return null as "no neighbours"
     public static IEnumerator Run
     (
-        Node from,
-        Func<Node, float> h,				    // Current -> Heuristic cost
-        Func<Node, bool> satisfies,				// Current -> Satisfies
-        Func<Node, IEnumerable<Arc>> expand,	// Current -> (Endpoint, Cost)[]
-        Action<IEnumerable<Node>> callback      // Node List -> ()
+        Node start,
+        Func<Node, float> heuristic,
+        Func<Node, bool> satisfies,
+        Func<Node, IEnumerable<NodeCost>> expand,
+        Action<IEnumerable<Node>> callback   
     )
     {
         var initialState = new AStarState<Node>();
-        initialState.open.Add(from);
-        initialState.gs[from] = 0;
-        initialState.fs[from] = h(from);
-        initialState.previous[from] = null;
-        initialState.current = from;
+        initialState.open.Add(start);
+        initialState.gs[start] = 0;
+        initialState.fs[start] = heuristic(start);
+        initialState.previous[start] = null;
+        initialState.current = start;
 
         var state = initialState;
         while (state.open.Count > 0 && !state.finished)
@@ -58,20 +53,20 @@ public class AStar<Node> where Node : class
 
                 var gCandidate = state.gs[candidate];
 
-                foreach (var ne in neighbours)
+                foreach (var neighbour in neighbours)
                 {
-                    if (ne.endpoint.In(state.closed))
+                    if (neighbour.endpoint.In(state.closed))
                         continue;
 
-                    var gNeighbour = gCandidate + ne.cost;
-                    state.open.Add(ne.endpoint);
+                    var gNeighbour = gCandidate + neighbour.cost;
+                    state.open.Add(neighbour.endpoint);
 
-                    if (gNeighbour > state.gs.DefaultGet(ne.endpoint, () => gNeighbour))
+                    if (gNeighbour > state.gs.DefaultGet(neighbour.endpoint, () => gNeighbour))
                         continue;
 
-                    state.previous[ne.endpoint] = candidate;
-                    state.gs[ne.endpoint] = gNeighbour;
-                    state.fs[ne.endpoint] = gNeighbour + h(ne.endpoint);
+                    state.previous[neighbour.endpoint] = candidate;
+                    state.gs[neighbour.endpoint] = gNeighbour;
+                    state.fs[neighbour.endpoint] = gNeighbour + heuristic(neighbour.endpoint);
                 }
             }
 
@@ -84,7 +79,6 @@ public class AStar<Node> where Node : class
         }
         else
         {
-            //Climb reversed tree.
             var seq =
                 AStarUtility.Generate(state.current, n => state.previous[n])
                 .TakeWhile(n => n != null)

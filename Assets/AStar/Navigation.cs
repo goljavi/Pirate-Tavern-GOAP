@@ -39,8 +39,8 @@ public class Navigation
             node => finalNode == node,
             node =>
             {
-                var list = new List<AStar<Node>.Arc>();
-                foreach (var item in node.neighbours) list.Add(new AStar<Node>.Arc(item, 1));
+                var list = new List<AStar<Node>.NodeCost>();
+                foreach (var item in node.neighbours) list.Add(new AStar<Node>.NodeCost(item, 1));
                 return list;
             },
             path => { Path = path.Skip(1); }
